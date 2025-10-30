@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coding Is Giving | AI Operations Agency</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #fffaf5;
+            color: #3d2c1e;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* --- COLOR PALETTE --- */
+        :root {
+            --primary: #ff6b35;
+            --primary-light: #ff8c5a;
+            --secondary: #f7b267;
+            --accent: #f4845f;
+            --dark: #3d2c1e;
+            --light: #fffaf5;
+            --muted: #a67c5b;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(255, 107, 53, 0.35);
+        }
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.45);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* --- NAV --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 250, 245, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            transition: box-shadow 0.3s ease;
+        }
+        header.scrolled {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 0;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            font-weight: 500;
+            color: var(--dark);
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0%;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            padding: 9rem 0 5rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .hero-text p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: var(--muted);
+            max-width: 600px;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+            opacity: 0;
+        }
+        .hero-image img {
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            animation: fadeIn 1s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 5rem 0;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--dark);
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+            margin: 0.8rem auto 0;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+        .service-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 107, 53, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        .service-card p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* --- ABOUT --- */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+        .about-text {
+            flex: 1;
+        }
+        .about-text p {
+            margin-bottom: 1rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        .about-image {
+            flex: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* --- CTA --- */
+        .cta {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: #fff;
+            text-align: center;
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+        }
+        .cta h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+        }
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta .btn-secondary {
+            background: #fff;
+            color: var(--primary);
+            border: none;
+        }
+        .cta .btn-secondary:hover {
+            background: #f5f5f5;
+            color: var(--primary-light);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--dark);
+            color: #fffaf5;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+        footer a {
+            color: var(--secondary);
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+        }
+        .social-links a {
+            font-size: 1.4rem;
+            transition: color 0.3s ease;
+        }
+        .social-links a:hover {
+            color: var(--primary-light);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-links {
+                display: none;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+        }
+        @media (max-width: 600px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header id="header">
+        <nav class="container">
+            <a href="#" class="logo">Coding Is Giving</a>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero container">
+        <div class="hero-text">
+            <h1>Empowering Retail with AI Agents</h1>
+            <p>We build and customize AI-powered agents that streamline your retail operations, worldwide. Smarter workflows, happier customers.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">Get Started</a>
+                <a href="#services" class="btn btn-secondary">Our Services</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=800&q=60" alt="Retail AI">
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="container">
+            <h2 class="section-title">What We Do</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>AI Agent Creation</h3>
+                    <p>We design intelligent agents tailored to your retail needs, from inventory to customer support.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚙️</div>
+                    <h3>Workflow Automation</h3>
+                    <p>Automate repetitive tasks and free your team to focus on growth and creativity.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🌍</div>
+                    <h3>Global Support</h3>
+                    <p>Our team supports clients around the world, ensuring seamless integration and uptime.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3>Data Insights</h3>
+                    <p>Unlock actionable insights from your data with custom dashboards and reporting agents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container about-content">
+            <div class="about-text">
+                <h2 class="section-title" style="text-align: left;">About Us</h2>
+                <p>Founded on the belief that technology should give back, Coding Is Giving merges innovation with empathy. We specialize in AI operations for retail businesses, big or small.</p>
+                <p>Our mission is to democratize AI, making it accessible and practical for everyday operations. Whether you need a chatbot, inventory manager, or sales assistant, we craft agents that fit right in.</p>
+                <p>Join us in building a smarter, more connected retail future—one agent at a time.</p>
+            </div>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=60" alt="Team collaboration">
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact">
+        <div class="container">
+            <div class="cta">
+                <h2>Ready to Upgrade Your Operations?</h2>
+                <p>Let’s discuss how our AI agents can transform your retail business. Reach out for a free consultation.</p>
+                <a href="mailto:admin@codingisgiving.com" class="btn btn-secondary">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="year"></span> Coding Is Giving. All rights reserved.</p>
+            <p>Email: <a href="mailto:hello@codingisgiving.com">admin@codingisgiving.com</a></p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/company/coding-is-giving/" target="_blank" aria-label="LinkedIn">💼</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 40) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle (basic)
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.querySelector('.nav-links');
+        menuToggle.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.background = '#fffaf5';
+            navLinks.style.padding = '1rem 0';
+            navLinks.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
+        });
+
+        // Set current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
